@@ -57,7 +57,7 @@ job "nginx" {
     }
   }
 
-  group "be-prod" {
+  group "engine-prod" {
     count = 1
 
     network {
@@ -67,11 +67,11 @@ job "nginx" {
     }
 
     service {
-      name = "be-prod"
+      name = "engine-prod"
       port = "http"
     }
 
-    task "be-prod" {
+    task "engine-prod" {
       driver = "docker"
 
       config {
@@ -84,8 +84,8 @@ job "nginx" {
 
       template {
         data = <<EOF
-            upstream be-prod {
-                {{ range service "service-be-prod" }}
+            upstream engine-prod {
+                {{ range service "service-engine-prod" }}
                 server {{ .Address }}:{{ .Port }};
             {{ else }}server 127.0.0.1:65535; force a 502
                 {{ end }}
@@ -95,7 +95,7 @@ job "nginx" {
               listen 3000;
 
               location / {
-                  proxy_pass http://be-prod;
+                  proxy_pass http://engine-prod;
                   proxy_http_version 1.1;
                   proxy_set_header Upgrade $http_upgrade;
                   proxy_set_header Connection 'upgrade';
