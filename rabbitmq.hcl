@@ -20,10 +20,10 @@ job "rabbitmq" {
         image = "rabbitmq:3.11.5-management"
       }
 
-      resources {
-        cpu    = 500  # 500 MHz
-        memory = 512  # 512MB
-      }
+      // resources {
+      //  cpu    = 500  # 500 MHz
+      //  memory = 512  # 512MB
+      // }
     }
   }
 }
