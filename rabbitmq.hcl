@@ -15,13 +15,14 @@ job "rabbitmq" {
 
     service {
       name = "rabbitmq-service"
-      port = "http"
+      port = "amqp"
     }
 
     task "rabbitmq" {
       driver = "docker"
 
       config {
+        ports = ["amqp"]
         image = "rabbitmq:3.11.5-management"
       }
 
