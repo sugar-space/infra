@@ -86,7 +86,7 @@ job "nginx" {
       template {
         data = <<EOF
             upstream engine-prod {
-              ip_hash;
+              # ip_hash;
                 {{ range service "service-engine-prod" }}
                 server {{ .Address }}:{{ .Port }};
             {{ else }}server 127.0.0.1:65535; force a 502
@@ -104,7 +104,7 @@ job "nginx" {
                   proxy_set_header Connection 'upgrade';
                   proxy_set_header Host $host;
                   proxy_set_header X-Real_IP $remote_addr;
-                  
+
                   proxy_cache_bypass $http_upgrade;
 
                   proxy_http_version 1.1;
