@@ -6,10 +6,10 @@ job "rabbitmq" {
 
     network {
       port "amqp" {
-        to = 5672
+        static = 5672
       }
       port "management" {
-        to = 15672
+        static = 15672
       }
     }
 
