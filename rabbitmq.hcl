@@ -27,7 +27,7 @@ job "rabbitmq" {
       driver = "docker"
 
       config {
-        ports = ["amqp"]
+        ports = ["amqp", "management"]
         image = "rabbitmq:3.11.5-management"
       }
 
