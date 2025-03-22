@@ -18,6 +18,11 @@ job "rabbitmq" {
       port = "amqp"
     }
 
+    service {
+      name = "rabbitmq-service"
+      port = "management"
+    }
+
     task "rabbitmq" {
       driver = "docker"
 
