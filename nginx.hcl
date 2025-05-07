@@ -47,6 +47,10 @@ job "nginx" {
                   proxy_set_header Host $host;
                   proxy_cache_bypass $http_upgrade;
               }
+
+              location /.well-known/walletconnect.txt {
+                return 200 "eea2da54-0516-4128-99df-be42da100bc0=11b7a27f2d96e4a9d83163d516e76bf068babbdfe6a6c37c79d740dcf0090d9e";
+              }
           }
         EOF
 
