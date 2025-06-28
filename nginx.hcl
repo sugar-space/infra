@@ -172,10 +172,10 @@ job "nginx" {
               }
           }
       EOF
+      
+      destination   = "local/load-balancer.conf"
+      change_mode   = "signal"
+      change_signal = "SIGHUP"
     }
-
-    destination   = "local/load-balancer.conf"
-    change_mode   = "signal"
-    change_signal = "SIGHUP"
   }
 }
