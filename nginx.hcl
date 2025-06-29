@@ -185,7 +185,7 @@ job "nginx" {
 
     network {
       port "http" {
-        static = 9000
+        static = 7000
       }
     }
 
@@ -216,7 +216,7 @@ job "nginx" {
             }
 
             server {
-              listen 9000;
+              listen 7000;
 
               location / {
 
