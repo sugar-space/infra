@@ -148,34 +148,34 @@ job "nginx" {
           "local:/etc/nginx/conf.d",
         ]
       }
-    }
 
-    template {
-      data = <<EOF
-        upstream waffle-prod {
-                {{ range service "service-waffle-web-prod" }}
-                server {{ .Address }}:{{ .Port }};
-            {{ else }}server 127.0.0.1:65535; force a 502
-                {{ end }}
-            }
-
-            server {
-              listen 4000;
-
-              location / {
-                  proxy_pass http://waffle-prod;
-                  proxy_http_version 1.1;
-                  proxy_set_header Upgrade $http_upgrade;
-                  proxy_set_header Connection 'upgrade';
-                  proxy_set_header Host $host;
-                  proxy_cache_bypass $http_upgrade;
+      template {
+        data = <<EOF
+          upstream waffle-prod {
+                  {{ range service "service-waffle-web-prod" }}
+                  server {{ .Address }}:{{ .Port }};
+              {{ else }}server 127.0.0.1:65535; force a 502
+                  {{ end }}
               }
-          }
-      EOF
-      
-      destination   = "local/load-balancer.conf"
-      change_mode   = "signal"
-      change_signal = "SIGHUP"
+
+              server {
+                listen 4000;
+
+                location / {
+                    proxy_pass http://waffle-prod;
+                    proxy_http_version 1.1;
+                    proxy_set_header Upgrade $http_upgrade;
+                    proxy_set_header Connection 'upgrade';
+                    proxy_set_header Host $host;
+                    proxy_cache_bypass $http_upgrade;
+                }
+            }
+        EOF
+
+        destination   = "local/load-balancer.conf"
+        change_mode   = "signal"
+        change_signal = "SIGHUP"
+      }
     }
   }
 }
