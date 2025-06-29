@@ -185,7 +185,7 @@ job "nginx" {
 
     network {
       port "http" {
-        static = 8000
+        static = 5000
       }
     }
 
