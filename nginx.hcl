@@ -61,7 +61,6 @@ job "nginx" {
     }
   }
 
-
   group "engine-prod" {
     count = 1
 
@@ -231,6 +230,68 @@ job "nginx" {
 
                   proxy_http_version 1.1;
                   proxy_pass http://waffle-engine-prod;
+              }
+          }
+        EOF
+
+        destination   = "local/load-balancer.conf"
+        change_mode   = "signal"
+        change_signal = "SIGHUP"
+      }
+    }
+  }
+
+  group "waffle-scraper-prod" {
+    count = 1
+
+    network {
+      port "http" {
+        static = 5000
+      }
+    }
+
+    service {
+      name = "waffle-scraper-prod"
+      port = "http"
+    }
+
+    task "waffle-scraper-prod" {
+      driver = "docker"
+
+      config {
+        image = "nginx"
+        ports = ["http"]
+        volumes = [
+          "local:/etc/nginx/conf.d",
+        ]
+      }
+
+      template {
+        data = <<EOF
+            upstream waffle-scraper-prod {
+              # ip_hash;
+                {{ range service "service-waffle-scraper-prod" }}
+                server {{ .Address }}:{{ .Port }};
+            {{ else }}server 127.0.0.1:65535; force a 502
+                {{ end }}
+            }
+
+            server {
+              listen 5000;
+
+              location / {
+
+                  real_ip_header X-Real-IP;
+
+                  proxy_set_header Upgrade $http_upgrade;
+                  proxy_set_header Connection 'upgrade';
+                  proxy_set_header Host $host;
+                  proxy_set_header X-Real_IP $remote_addr;
+
+                  proxy_cache_bypass $http_upgrade;
+
+                  proxy_http_version 1.1;
+                  proxy_pass http://waffle-scraper-prod;
               }
           }
         EOF
