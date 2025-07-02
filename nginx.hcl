@@ -171,7 +171,7 @@ job "nginx" {
                 }
 
                 location /.well-known/walletconnect.txt {
-                  return 200 "4f5074a5-bc1e-4bca-8911-851b023da159=8315b8a34584734def0c919c81a78eafdddbdfc2ae3dc1590669b2cbd94757ec"
+                  return 200 "4f5074a5-bc1e-4bca-8911-851b023da159=8315b8a34584734def0c919c81a78eafdddbdfc2ae3dc1590669b2cbd94757ec";
                 }
             }
         EOF
