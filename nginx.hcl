@@ -58,13 +58,6 @@ job "nginx" {
             {{ end }}
           }
 
-          upstream river-prod {
-            {{ range service "service-river-web-prod" }}
-              server {{ .Address }}:{{ .Port }};
-            {{ else }}server 127.0.0.1:65535; force a 502
-            {{ end }}
-          }
-
           server {
             listen 80;
             server_name sugarhub.space;
@@ -136,25 +129,6 @@ job "nginx" {
 
               proxy_http_version 1.1;
               proxy_pass http://waffle-engine-prod;
-            }
-          }
-
-          server {
-            listen 80;
-            server_name riverfi.xyz;
-
-            location / {
-              real_ip_header X-Real-IP;
-
-              proxy_set_header Upgrade $http_upgrade;
-              proxy_set_header Connection 'upgrade';
-              proxy_set_header Host $host;
-              proxy_set_header X-Real_IP $remote_addr;
-
-              proxy_cache_bypass $http_upgrade;
-
-              proxy_http_version 1.1;
-              proxy_pass http://river-prod;
             }
           }
         EOF
